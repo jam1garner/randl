@@ -1,12 +1,5 @@
-[package]
-name = "randl"
-version = "0.1.0"
-authors = ["jam1garner <8260240+jam1garner@users.noreply.github.com>"]
-edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
-kdl = "1.0.0"
-hash40 = "0.4.4"
-thiserror = "1.0.24"
+[workspace]
+members = [
+    "randl-core",
+    "randl-cli",
+]

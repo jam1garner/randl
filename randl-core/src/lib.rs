@@ -3,44 +3,17 @@ use std::{collections::HashMap, fs, path::Path};
 use hash40::Hash40;
 use kdl::{KdlError, KdlNode, KdlValue};
 
-#[derive(thiserror::Error, Debug, Clone)]
-enum Error {
-    #[error("the file could not be read")]
-    FileReadFail,
-    #[error("could not parse: invalid KDL")]
-    ParseFail(KdlError),
-    #[error("The value did not match the specified type")]
-    IncorrectType,
-    #[error("Type name invalid")]
-    InvalidType,
-    #[error("Value must follow type declaration in set")]
-    NoValue,
-    #[error("No percent provided for the given chance expression")]
-    NoPercent,
-    #[error("Chance expressions cannot be mixed with other expressions")]
-    MixedExprs,
-    #[error("Too many expressions were provided. Only multiple `chance` expessions may be used")]
-    TooManyExprs,
-    #[error("An expressions is required for every parameter entry specified")]
-    ExprRequired,
-    #[error("Invalid return: {0}")]
-    InvalidReturn(&'static str),
-    #[error("Invalid chance: {0}")]
-    InvalidChance(&'static str),
-    #[error("Invalid expression: {0}")]
-    InvalidExpr(String),
-    #[error("Invalid top-level entry: {0}")]
-    InvalidRandlEntry(&'static str),
-}
+mod parser;
+mod error;
 
 #[derive(Debug)]
-struct RandlFile {
+pub struct RandlFile {
     entries: Vec<RandlEntry>,
     sets: HashMap<String, Set>,
 }
 
 impl RandlFile {
-    fn open<P: AsRef<Path>>(path: P) -> Result<Self, Error> {
+    pub fn open<P: AsRef<Path>>(path: P) -> Result<Self, Error> {
         Self::from_str(
             fs::read_to_string(path)
                 .map_err(|_| Error::FileReadFail)?
@@ -48,7 +21,7 @@ impl RandlFile {
         )
     }
 
-    fn from_str(s: &str) -> Result<Self, Error> {
+    pub fn from_str(s: &str) -> Result<Self, Error> {
         kdl::parse_document(s)
             .map(Self::from_nodes)
             .map_err(Error::ParseFail)?

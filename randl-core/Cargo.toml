@@ -1,0 +1,10 @@
+[package]
+name = "randl-core"
+version = "0.1.0"
+authors = ["jam1garner <8260240+jam1garner@users.noreply.github.com>"]
+edition = "2018"
+
+[dependencies]
+kdl = "1.0.0"
+hash40 = "0.4.4"
+thiserror = "1.0.24"
