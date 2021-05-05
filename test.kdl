@@ -1,0 +1,37 @@
+set "fighter_ids" {
+    int 1
+    int 4
+    int 20
+}
+
+file "attack_data_param.prc" {
+    attack_data.0.start_frame {
+        // returns an integer from 3 to 5
+        chance percent=80 {
+            return from=3 to=5
+        }
+
+        // returns the constant value 0
+        chance percent=5 {
+            return true
+        }
+
+        // 4% chance of returning a fighter_id defined in the set above
+        chance percent=4 {
+            return set="fighter_ids"
+        }
+
+        // 1% chance of returning either "test" or "test2"
+        chance percent=1 {
+            return {
+                hash40 "test"
+                hash40 "test2"
+            }
+        }
+
+        // returns the orignal value from 90-100%
+        chance percent=10 {
+            original
+        }
+    }
+}
