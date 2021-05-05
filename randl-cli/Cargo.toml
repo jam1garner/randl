@@ -11,3 +11,4 @@ path = "src/main.rs"
 [dependencies]
 randl-core = { path = "../randl-core" }
 structopt = "0.3"
+owo-colors = "2.0.0"

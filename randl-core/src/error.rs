@@ -1,5 +1,6 @@
+use kdl::KdlError;
 #[derive(thiserror::Error, Debug, Clone)]
-pub enum Error {
+pub enum ParseError {
     #[error("the file could not be read")]
     FileReadFail,
     #[error("could not parse: invalid KDL")]
@@ -20,10 +21,30 @@ pub enum Error {
     ExprRequired,
     #[error("Invalid return: {0}")]
     InvalidReturn(&'static str),
+    #[error("Invalid `value` statement: {0}")]
+    InvalidValueStmt(&'static str),
     #[error("Invalid chance: {0}")]
     InvalidChance(&'static str),
     #[error("Invalid expression: {0}")]
     InvalidExpr(String),
     #[error("Invalid top-level entry: {0}")]
     InvalidRandlEntry(&'static str),
+    #[error("Only `value` nodes allowed in sets, not `{0}`")]
+    NonValueInSet(String),
+}
+
+#[derive(thiserror::Error, Debug, Clone)]
+pub enum EvalError {
+    #[error("Index {0} was outside of the bounds of the param list")]
+    IndexOutOfBounds(usize),
+    #[error("Field `{0}` is missing")]
+    MissingField(String),
+    #[error("Invalid field: {0}")]
+    InvalidField(&'static str),
+    #[error("{0} cannot be assigned to {1}")]
+    InvalidAssignment(&'static str, &'static str),
+    #[error("The given value was too large to fit")]
+    IntTooBig,
+    #[error("The set {0:?} could not be found")]
+    InvalidSet(String),
 }
