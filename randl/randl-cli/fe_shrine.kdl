@@ -1,0 +1,10 @@
+set "69" {
+    value 69
+    value -69
+}
+
+file "fe_shrine.stdat" {
+    effect_line_up_target.*.y {
+        return set="69"
+    }
+}

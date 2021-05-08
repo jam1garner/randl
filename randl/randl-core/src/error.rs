@@ -37,7 +37,7 @@ pub enum ParseError {
 pub enum EvalError {
     #[error("Index {0} was outside of the bounds of the param list")]
     IndexOutOfBounds(usize),
-    #[error("Field `{0}` is missing")]
+    #[error("{0}")]
     MissingField(String),
     #[error("Invalid field: {0}")]
     InvalidField(&'static str),

@@ -111,9 +111,3 @@ enum Expr {
     Return(Return),
     Original,
 }
-
-fn main() {
-    let kdl = RandlFile::open("test.kdl").unwrap();
-
-    dbg!(kdl);
-}

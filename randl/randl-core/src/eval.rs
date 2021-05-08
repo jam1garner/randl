@@ -86,7 +86,7 @@ fn get_path_struct<'a>(
             let field = struct_lookup(param, field)?;
             get_path_param_kind(field, path)
         }
-        Some(PrcPathComponent::Index(index)) => Err(EvalError::MissingField(
+        Some(PrcPathComponent::Index(_)) => Err(EvalError::MissingField(
             "Cannot index into a `ParamStruct`".into(),
         )),
         Some(PrcPathComponent::Wildcard) => {
@@ -152,14 +152,14 @@ impl RandlEntry {
                     (ParamKind::Hash(h), Value::Int(new)) => {
                         *h = Hash40(new as u64);
                     }
-                    (ParamKind::Hash(h), Value::String(s)) => {
+                    (ParamKind::Hash(h), Value::String(ref s)) => {
                         *h = prc::hash40::to_hash40(&s);
                     }
                     (ParamKind::Hash(h), Value::Hash40(new)) => {
                         *h = new;
                     }
-                    (ParamKind::Str(s), Value::String(new)) => {
-                        *s = new;
+                    (ParamKind::Str(s), Value::String(ref new)) => {
+                        *s = new.clone();
                     }
                     (ParamKind::List(_), _) => {
                         return Err(EvalError::InvalidAssignment("values", "lists"))
