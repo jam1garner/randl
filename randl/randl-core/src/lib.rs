@@ -79,7 +79,7 @@ struct ChanceStmt {
 }
 
 #[derive(Debug, Clone)]
-enum Value {
+pub enum Value {
     Int(i64),
     Float(f64),
     String(String),
@@ -103,7 +103,7 @@ enum Return {
 }
 
 #[derive(Debug)]
-pub struct Set(Vec<Value>);
+pub struct Set(pub Vec<Value>);
 
 #[derive(Debug)]
 enum Expr {
