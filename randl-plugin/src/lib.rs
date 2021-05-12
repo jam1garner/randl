@@ -26,7 +26,7 @@ fn prc_callback(hash: u64, mut data: &mut [u8]) -> Option<usize> {
     Some(len)
 }
 
-const CONFIG_FOLDER: &str = "sd:/atmosphere/contents/01006A800016E000/romfs";
+const CONFIG_FOLDER: &str = "sd:/atmosphere/contents/01006A800016E000/romfs/randl";
 
 type EntryAndSets = (&'static RandlEntry, &'static HashMap<String, Set>);
 
