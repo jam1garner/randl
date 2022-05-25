@@ -11,7 +11,7 @@ mod eval;
 
 pub use error::{EvalError, ParseError};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RandlFile {
     pub entries: Vec<RandlEntry>,
     pub sets: HashMap<String, Set>,
@@ -33,14 +33,14 @@ impl RandlFile {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum PrcPathComponent {
     Field(String),
     Index(usize),
     Wildcard,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct PrcPath(Vec<PrcPathComponent>);
 
 impl PrcPath {
@@ -60,19 +60,19 @@ impl<'a> PrcPathSlice<'a> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RandlEntry {
     pub prc_name: String,
     prc_fields: Vec<PrcEntry>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct PrcEntry {
     path: PrcPath,
     expr: Expr,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct ChanceStmt {
     percent: f64,
     expr: Box<Expr>,
@@ -88,13 +88,13 @@ pub enum Value {
     Original,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum Range {
     Int(i64, i64),
     Float(f64, f64),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum Return {
     Constant(Value),
     Range(Range),
@@ -102,10 +102,10 @@ enum Return {
     AnonymousSet(Set),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Set(pub Vec<Value>);
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum Expr {
     Random(Vec<ChanceStmt>),
     Return(Return),

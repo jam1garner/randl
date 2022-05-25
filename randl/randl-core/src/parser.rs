@@ -108,7 +108,7 @@ impl Value {
                     if let Some(hash40) = node.properties.get("hash40") {
                         let hash40 = match hash40 {
                             &KdlValue::Int(hash) => Hash40(hash as u64),
-                            KdlValue::String(s) => hash40::to_hash40(&s),
+                            KdlValue::String(s) => hash40::hash40(&s),
                             _ => {
                                 return Err(Error::InvalidValueStmt(
                                     "`hash40` property must be a string or an integer",
@@ -249,7 +249,7 @@ impl Return {
                         if let Some(hash40) = node.properties.get("hash40") {
                             let hash40 = match hash40 {
                                 &KdlValue::Int(hash) => Hash40(hash as u64),
-                                KdlValue::String(s) => hash40::to_hash40(&s),
+                                KdlValue::String(s) => hash40::hash40(&s),
                                 _ => {
                                     return Err(Error::InvalidReturn(
                                         "`hash40` property must be a string or an integer",

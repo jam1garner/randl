@@ -1,15 +1,17 @@
 #![feature(proc_macro_hygiene)]
 
-use arcropolis_api::ext_callback;
+use arcropolis_api::arc_callback;
+use arcropolis_api::hash40;
 use randl_core::{RandlFile, RandlEntry, Set, Value};
 
 use randl_core::prc::{self, hash40::{self, Hash40}};
 
+use std::path::Path;
 use std::fs;
 use std::io::Cursor;
 use std::collections::HashMap;
 
-#[ext_callback]
+#[arc_callback]
 fn prc_callback(hash: u64, mut data: &mut [u8]) -> Option<usize> {
     let (entry, sets) = RANDL_LOOKUP.get(&Hash40(hash))?;
 
@@ -26,11 +28,12 @@ fn prc_callback(hash: u64, mut data: &mut [u8]) -> Option<usize> {
     Some(len)
 }
 
-const CONFIG_FOLDER: &str = "sd:/atmosphere/contents/01006A800016E000/romfs/randl";
+const CONFIG_FOLDER: &str = "sd:/ultimate/randl";
 
 type EntryAndSets = (&'static RandlEntry, &'static HashMap<String, Set>);
 
 lazy_static::lazy_static! {
+    #[derive(Clone)]
     static ref RANDL_FILES: Vec<RandlFile> = fs::read_dir(CONFIG_FOLDER).unwrap()
         .filter_map(|entry| {
             let entry = entry.ok()?;
@@ -75,14 +78,14 @@ impl<'a> Iterator for PathIter<'a> {
     fn next(&mut self) -> Option<Self::Item> {
         match self {
             PathIter::Once(path) => {
-                let hash = hash40::to_hash40(path);
+                let hash = hash40::hash40(path);
                 *self = PathIter::None;
                 Some(hash)
             }
             PathIter::Templated { prefix, suffix, templates } => {
                 templates.next()
                     .map(|middle| {
-                        hash40::to_hash40(&match middle {
+                        hash40::hash40(&match middle {
                             Value::Int(i) => format!(
                                 "{}{}{}",
                                 prefix,
@@ -125,10 +128,22 @@ impl<'a> PathIter<'a> {
 
 #[skyline::main(name = "randl")]
 pub fn main() {
-    prc_callback::install("prc");
 
+
+    if !Path::new(CONFIG_FOLDER).is_dir() {
+        fs::create_dir(CONFIG_FOLDER).unwrap();
+    }
     lazy_static::initialize(&RANDL_FILES);
     lazy_static::initialize(&RANDL_LOOKUP);
+
+    for files in RANDL_FILES.to_vec().into_iter() {
+        let entries = files.entries;
+        for entry in entries {
+            let path_ = entry.prc_name;
+            let hash = hash40(&path_);
+            prc_callback::install(hash, 1000000);
+        }
+    }
 }
 
 trait SplitOnceCompat {

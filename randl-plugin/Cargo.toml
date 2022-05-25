@@ -15,6 +15,7 @@ skyline = { git = "https://github.com/ultimate-research/skyline-rs.git" }
 randl-core = { path = "../randl/randl-core" }
 arcropolis-api = { git = "https://github.com/raytwo/arcropolis_api" }
 lazy_static = "1.4.0"
+indexmap = "=1.2"
 
 [profile.dev]
 panic = "abort"
