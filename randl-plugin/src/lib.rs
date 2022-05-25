@@ -6,6 +6,7 @@ use randl_core::{RandlFile, RandlEntry, Set, Value};
 
 use randl_core::prc::{self, hash40::{self, Hash40}};
 
+use std::path::Path;
 use std::fs;
 use std::io::Cursor;
 use std::collections::HashMap;
@@ -128,6 +129,10 @@ impl<'a> PathIter<'a> {
 #[skyline::main(name = "randl")]
 pub fn main() {
 
+
+    if !Path::new(CONFIG_FOLDER).is_dir() {
+        fs::create_dir(CONFIG_FOLDER).unwrap();
+    }
     lazy_static::initialize(&RANDL_FILES);
     lazy_static::initialize(&RANDL_LOOKUP);
 
