@@ -7,7 +7,7 @@ use prc::{ParamKind, ParamStruct};
 type Result<T> = std::result::Result<T, EvalError>;
 
 fn struct_lookup<'a>(param: &'a mut ParamStruct, field: &str) -> Result<&'a mut ParamKind> {
-    let hash = prc::hash40::to_hash40(field);
+    let hash = prc::hash40::hash40(field);
     let index = param
         .0
         .iter()
@@ -153,7 +153,7 @@ impl RandlEntry {
                         *h = Hash40(new as u64);
                     }
                     (ParamKind::Hash(h), Value::String(ref s)) => {
-                        *h = prc::hash40::to_hash40(&s);
+                        *h = prc::hash40::hash40(&s);
                     }
                     (ParamKind::Hash(h), Value::Hash40(new)) => {
                         *h = new;
